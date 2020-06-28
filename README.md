@@ -23,9 +23,10 @@ scp summa_20200628.sif uvaID@rivanna.hpc.Virginia.edu:/home/uvaID
 - Select Menu (Interactive APPs - JupyterLab)
 - Select Option (Work Directory - HOME)
 
-6. You can find `summa_20200628.sif` singularity image in ‘/home/uvaID` folder
+6. You can find `summa_20200628.sif` singularity image in ‘/home/uvaID` folder of Rivanna
 
-7. Upload kernel.json file in  ‘/home/uvaID` folder
+7. Upload kernel.json file in this GitHub to ‘/home/uvaID` folder of Rivanna
+- https://github.com/DavidChoi76/SUMMA_Singularity_In_Rivanna/blob/master/kernel.json
 
 8. Create SUMMA Jupyter Kernel 
 ```python
