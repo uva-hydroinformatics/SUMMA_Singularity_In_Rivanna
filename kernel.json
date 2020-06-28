@@ -1,13 +1,13 @@
 {
 "argv":["singularity",
         "exec",
-        "/home/yc5ef/singularity_images/pyrhessys_20200626.sif",
+        "/home/yc5ef/summa_20200628.sif",
         "python",
         "-m",
         "ipykernel",
         "-f",
         "{connection_file}"
         ],
-        "display_name":"pyrhessys",
+        "display_name":"summa",
         "language":"python"
 }
