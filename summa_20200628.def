@@ -1,0 +1,97 @@
+Bootstrap: docker
+From: ubuntu:18.04
+
+%post
+    ## Install only the packages that are needed
+    apt-get -y update
+    apt -y install vim nano wget software-properties-common apt-transport-https
+    apt-get install -y --no-install-recommends \
+    ca-certificates \
+    git \
+    make \
+    libnetcdff-dev \
+    liblapack-dev 
+
+    ## Install gfortran-6
+    add-apt-repository ppa:ubuntu-toolchain-r/test -y \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends gfortran-6 \
+    && apt-get clean
+    
+    ## Install Anaconda3
+    wget --quiet https://repo.continuum.io/archive/Anaconda3-2020.02-Linux-x86_64.sh -O ~/anaconda.sh && \
+    /bin/bash ~/anaconda.sh -b -p /opt/conda && \
+    rm ~/anaconda.sh
+    export PATH=/opt/conda/bin:$PATH
+    pip install --upgrade pip
+    
+    
+    ## Install R
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+    add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran35/'
+    apt-get update
+    DEBIAN_FRONTEND=noninteractive apt-get -y install r-base r-base-dev
+
+    ## Configure default locale, see https://github.com/rocker-org/rocker/issues/19
+    apt-get clean && apt-get update && apt-get install -y locales
+    locale-gen en_US.UTF-8
+
+    ## Install GRASS 7.8.0
+    add-apt-repository ppa:ubuntugis/ubuntugis-unstable
+    apt-get update
+    apt-get -y install grass grass-dev libgdal-dev libproj-dev
+
+    ## Install required R packages
+    R --slave -e 'install.packages("sp")'
+    R --slave -e 'install.packages("XML")'
+    R --slave -e 'install.packages("rgdal")'
+    R --slave -e 'install.packages("https://cran.r-project.org/src/contrib/Archive/rgrass7/rgrass7_0.1-12.tar.gz", repo=NULL, type="source")'
+    R --slave -e 'install.packages("units")'
+    R --slave -e 'install.packages("sf")'
+    R --slave -e 'install.packages("stars")'
+ 
+    ## Install required R packages for IRkernel https://github.com/IRkernel/IRkernel
+    R --slave -e 'install.packages("openssl")'
+    R --slave -e 'install.packages("curl")'
+    R --slave -e 'install.packages("httr")'
+    R --slave -e 'install.packages("devtools")'
+    R --slave -e 'devtools::install_github("IRkernel/IRkernel")'
+    R --slave -e 'IRkernel::installspec()'   
+    
+    ## clone pysumma and summa and switch to develop branch
+    git clone -b develop https://github.com/DavidChoi76/pysumma.git; cd pysumma; pip install .
+    cd ..; git clone -b develop https://github.com/NCAR/summa.git
+    cd summa; git checkout a3a840b139d80f645fe5acf31d32baad462a899b
+
+    ## command to edit Makefile flags
+    cd build && sed -i 's/$(FC_EXE) $(FLAGS_NOAH) -c $(NOAHMP)/$(FC_EXE) $(FLAGS_NOAH) -c $(NOAHMP) $(INCLUDES)/g' Makefile \
+	 && sed -i 's/$(FC_EXE) $(FLAGS_COMM) -c $(COMM_ALL)/$(FC_EXE) $(FLAGS_COMM) -c $(COMM_ALL) $(INCLUDES)/g' Makefile
+
+    ## export necessary environment variables specified in Makefile    
+    export F_MASTER=/summa
+    export FC=gfortran
+    export FC_EXE=/usr/bin/gfortran-6
+    export INCLUDES='-I/usr/include' 
+    export LIBRARIES='-L/usr/lib -lnetcdff -lblas -llapack'
+    
+    ## build from Makefile
+    make -f ${F_MASTER}/build/Makefile
+    
+    ## install Python libraries
+    pip install simpledbf
+    pip install wget
+    pip install plotnine
+    conda install -c conda-forge cartopy
+    conda install -c conda-forge gdal
+    
+%environment
+    ## export necessary environment variables for GRASSGIS
+    export PATH=/opt/conda/bin:$PATH
+    export GISBASE=/usr/lib/grass78
+    export PYTHONPATH=${PYTHON-PATH}:$GISBASE/etc/python/
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GISBASE/lib
+    export GIS_LOCK=$$
+    export GISRC=$HOME/.grass7/rc
+
+%runscript
+    exec python $@
