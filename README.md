@@ -6,6 +6,7 @@
 
 2. Create a Definition file to create a Singularity image
 - Use a SUMMA and pySUMMA definition file in this GitHub
+- https://github.com/DavidChoi76/SUMMA_Singularity_In_Rivanna/blob/master/summa_20200628.def
 
 3. Create the Singularity image
 ```python
