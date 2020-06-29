@@ -1,4 +1,4 @@
-ootstrap: docker
+Bootstrap: docker
 From: ubuntu:18.04
 
 %post
@@ -25,8 +25,11 @@ From: ubuntu:18.04
     pip install --upgrade pip
 
     ## clone pysumma and summa and switch to develop branch
-    git clone -b develop https://github.com/DavidChoi76/pysumma.git; cd pysumma/pysumma/preprocessing/; rm -rf __init__.py 
-    cd ../..; pip install .
+    git clone -b develop https://github.com/DavidChoi76/pysumma.git; cd pysumma/pysumma/; rm -rf preprocessing 
+    sed -i 's/from .preprocessing import LocalAttributes, InitialCondition//g' __init__.py
+    sed -i 's/from .preprocessing import read_gis//g' __init__.py
+    sed -i 's/from .preprocessing import input_netcdf//g' __init__.py
+    cd ..; pip install .
     cd ..; git clone -b develop https://github.com/NCAR/summa.git
     cd summa; git checkout a3a840b139d80f645fe5acf31d32baad462a899b
 
@@ -45,6 +48,10 @@ From: ubuntu:18.04
     make -f ${F_MASTER}/build/Makefile
     
     conda install -c conda-forge cartopy
+
+%environment    
+    export PATH=/opt/conda/bin:$PATH
+    export PYTHONPATH=${PYTHON-PATH}
 
 %runscript
     exec python $@
