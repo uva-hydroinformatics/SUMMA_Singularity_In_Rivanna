@@ -12,6 +12,7 @@
 ```python
 sudo singularity build summa_20200628.sif summa_20200628.def
 ```
+- Sinuglarity image in HydroShare: https://www.hydroshare.org/resource/6e8b3991a6dc46ba97c00688f7cb67de/
 
 4. Upload Singularity image
 ```python
