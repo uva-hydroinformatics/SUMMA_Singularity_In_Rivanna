@@ -1,0 +1,56 @@
+Bootstrap: docker
+From: ubuntu:18.04
+
+%post
+    ## Install only the packages that are needed
+    apt-get -y update
+    apt -y install vim nano wget software-properties-common apt-transport-https
+    apt-get install -y --no-install-recommends \
+    ca-certificates \
+    git \
+    make \
+    libnetcdff-dev \
+    liblapack-dev 
+
+    ## Install gfortran-6
+    apt-get update
+    apt-get install -y --no-install-recommends gfortran-6
+    apt-get clean
+    
+    ## Install Anaconda3
+    wget --quiet https://repo.continuum.io/archive/Anaconda3-2020.02-Linux-x86_64.sh -O ~/anaconda.sh && \
+    /bin/bash ~/anaconda.sh -b -p /opt/conda && \
+    rm ~/anaconda.sh
+    export PATH=/opt/conda/bin:$PATH
+    conda update conda
+    pip install --upgrade pip
+
+    conda install -c conda-forge cartopy
+    pip install geoviews
+    
+    ## clone pysumma and summa and switch to develop branch
+    git clone https://github.com/UW-Hydro/pysumma.git
+    cd pysumma
+    pip install .  
+    cd ..
+    
+     ## clone and compile summa
+    git clone -b master https://github.com/NCAR/summa.git
+ 
+    ## export necessary environment variables specified in Makefile    
+    export F_MASTER=/summa
+    export FC=gfortran
+    export FC_EXE=/usr/bin/gfortran-6
+    export INCLUDES='-I/usr/include' 
+    export LIBRARIES='-L/usr/lib -lnetcdff -lblas -llapack'
+    ## build from Makefile
+    make -f ${F_MASTER}/build/Makefile  
+  
+
+%environment    
+    export PATH=/opt/conda/bin:$PATH
+    export PYTHONPATH=${PYTHON-PATH}
+
+%runscript
+    exec python $@
+    
