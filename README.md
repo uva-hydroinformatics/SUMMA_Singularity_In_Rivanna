@@ -6,17 +6,17 @@
 
 2. Create a Definition file to create a Singularity image
 - Use a SUMMA and pySUMMA definition file in this GitHub
-- https://github.com/DavidChoi76/SUMMA_Singularity_In_Rivanna/blob/master/summa_20200628.def
+- https://github.com/DavidChoi76/SUMMA_Singularity_In_Rivanna/blob/master/summa_singularity.def
 
 3. Create the Singularity image
 ```python
-sudo singularity build summa_20200628.sif summa_20200628.def
+sudo singularity build summa3_singularity.sif summa_singularity.def
 ```
 - Sinuglarity image in HydroShare: https://www.hydroshare.org/resource/6e8b3991a6dc46ba97c00688f7cb67de/
 
 4. Upload Singularity image
 ```python
-scp summa_20200628.sif UVA_ID@rivanna.hpc.virginia.edu:/home/UVA_ID
+scp summa3_singularity.sif UVA_ID@rivanna.hpc.virginia.edu:/home/UVA_ID
 ```
 
 5. Log in Rivanna (UVA HPC)
@@ -24,7 +24,7 @@ scp summa_20200628.sif UVA_ID@rivanna.hpc.virginia.edu:/home/UVA_ID
 - Select Menu (Interactive APPs - JupyterLab)
 - Select Option (Work Directory - HOME)
 
-6. You can find `summa_20200628.sif` singularity image in ‘/home/UVA_ID` folder of Rivanna
+6. You can find `summa_singularity.sif` singularity image in ‘/home/UVA_ID` folder of Rivanna
 
 7. Upload kernel.json file in this GitHub to ‘/home/uvaID` folder of Rivanna
 - https://github.com/DavidChoi76/SUMMA_Singularity_In_Rivanna/blob/master/kernel.json
