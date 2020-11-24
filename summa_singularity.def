@@ -22,32 +22,30 @@ From: ubuntu:18.04
     /bin/bash ~/anaconda.sh -b -p /opt/conda && \
     rm ~/anaconda.sh
     export PATH=/opt/conda/bin:$PATH
+    conda update conda
     pip install --upgrade pip
 
+    conda install -c conda-forge cartopy
+    pip install geoviews
+    
     ## clone pysumma and summa and switch to develop branch
-    git clone -b develop https://github.com/DavidChoi76/pysumma.git; cd pysumma/pysumma/; rm -rf preprocessing 
-    sed -i 's/from .preprocessing import LocalAttributes, InitialCondition//g' __init__.py
-    sed -i 's/from .preprocessing import read_gis//g' __init__.py
-    sed -i 's/from .preprocessing import input_netcdf//g' __init__.py
-    cd ..; pip install .
-    cd ..; git clone -b develop https://github.com/NCAR/summa.git
-    cd summa; git checkout a3a840b139d80f645fe5acf31d32baad462a899b
-
-    ## command to edit Makefile flags
-    cd build && sed -i 's/$(FC_EXE) $(FLAGS_NOAH) -c $(NOAHMP)/$(FC_EXE) $(FLAGS_NOAH) -c $(NOAHMP) $(INCLUDES)/g' Makefile \
-	 && sed -i 's/$(FC_EXE) $(FLAGS_COMM) -c $(COMM_ALL)/$(FC_EXE) $(FLAGS_COMM) -c $(COMM_ALL) $(INCLUDES)/g' Makefile
-
+    git clone https://github.com/UW-Hydro/pysumma.git
+    cd pysumma
+    pip install .  
+    cd ..
+    
+     ## clone and compile summa
+    git clone -b master https://github.com/NCAR/summa.git
+ 
     ## export necessary environment variables specified in Makefile    
     export F_MASTER=/summa
     export FC=gfortran
     export FC_EXE=/usr/bin/gfortran-6
     export INCLUDES='-I/usr/include' 
     export LIBRARIES='-L/usr/lib -lnetcdff -lblas -llapack'
-    
     ## build from Makefile
-    make -f ${F_MASTER}/build/Makefile
-    
-    conda install -c conda-forge cartopy
+    make -f ${F_MASTER}/build/Makefile  
+  
 
 %environment    
     export PATH=/opt/conda/bin:$PATH
@@ -55,3 +53,4 @@ From: ubuntu:18.04
 
 %runscript
     exec python $@
+    
