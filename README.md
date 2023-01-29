@@ -1,4 +1,4 @@
-# Using Singularity in Local (Approach 4) and HPC Cluster (Approach 11) for the reproducibility of SUMMA modeling
+# Using Singularity in Local (Approach 4) for the reproducibility of SUMMA modeling
 
 ## Instruction 
 1. Install Singularity in Ubuntu os.
