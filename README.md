@@ -14,28 +14,18 @@ sudo singularity build summa3_singularity.sif summa_singularity.def
 ```
 - Sinuglarity image in HydroShare: https://www.hydroshare.org/resource/6e8b3991a6dc46ba97c00688f7cb67de/
 
-4. Upload Singularity image
-```python
-scp summa3_singularity.sif UVA_ID@rivanna.hpc.virginia.edu:/home/UVA_ID
-```
+4. You can find `summa_singularity.sif` singularity image in the HS resource and download it in your local environment.
 
-5. Log in Rivanna (UVA HPC)
-- Move to https://rivanna-portal.hpc.virginia.edu/pun/sys/dashboard
-- Select Menu (Interactive APPs - JupyterLab)
-- Select Option (Work Directory - HOME)
-
-6. You can find `summa_singularity.sif` singularity image in ‘/home/UVA_ID` folder of Rivanna
-
-7. Upload kernel.json file in this GitHub to ‘/home/uvaID` folder of Rivanna
+5. Download kernel.json file from this GitHub to your local environment
 - https://github.com/DavidChoi76/SUMMA_Singularity_In_Rivanna/blob/master/kernel.json
 
-8. Create SUMMA Jupyter Kernel 
+6. Create SUMMA Jupyter Kernel 
 ```python
 mkdir -p ~/.local/share/jupyter/kernels/summa
 mv kernel.json ~/.local/share/jupyter/kernels/summa
 ```
 
-9. Start JupyterLab and select summa Kernel
+7. Start JupyterLab and select summa Kernel
 
 ## If you don't want to create a Singularity image, you can use `kernel_copy.json` in this GitHub
 - https://github.com/DavidChoi76/SUMMA_Singularity_In_Rivanna/blob/master/kernel_copy.json
