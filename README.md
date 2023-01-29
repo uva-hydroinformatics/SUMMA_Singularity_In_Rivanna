@@ -34,8 +34,4 @@ mv kernel.json ~/.local/share/jupyter/kernels/summa
 
 2. Change the name of `kernel_copy.json` to `kernel.json`  
 
-3. Upload `kernel.json` to ‘/home/uvaID` folder of Rivanna
-
-4. After that, follow step 8 above
-- This method use the summa Singularity image in yc5ef's Singularity image
-
+3. After that, follow step 6 above
